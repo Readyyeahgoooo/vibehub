@@ -24,7 +24,7 @@ const Header: React.FC<HeaderProps> = ({ lang, setLang }) => {
             <circle cx="13" cy="11" r="0.5" fill="currentColor" stroke="none" />
           </svg>
           <div className="flex flex-col">
-            <h1 className="text-xl font-semibold leading-tight tracking-tight">Vibe Hub</h1>
+            <h1 className="text-xl font-semibold leading-tight tracking-tight">VibeHub</h1>
             <p className="text-xs text-[#636c76]">The Directory for Vibe-Coded Innovations</p>
           </div>
         </div>
