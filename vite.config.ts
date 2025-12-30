@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
   return {
-    base: '/Vibehub-/',
+    // No base path needed for Vercel (it handles routing automatically)
     server: {
       port: 3000,
       host: '0.0.0.0',
