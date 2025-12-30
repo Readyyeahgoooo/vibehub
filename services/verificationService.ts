@@ -2,12 +2,21 @@
 // API key is hidden server-side, images are analyzed and discarded
 
 const VERIFY_API_URL = "/api/verify";
+const CLASSIFY_API_URL = "/api/classify";
 
 export interface VerificationResult {
   verified: boolean;
   confidence: number;
   extractedUsername?: string;
   reason?: string;
+}
+
+export interface ClassificationResult {
+  category: string;
+  suggestNewCategory: boolean;
+  newCategoryName?: string;
+  tags: string[];
+  reasoning: string;
 }
 
 /**
@@ -76,6 +85,53 @@ export async function verifyScreenshot(
 }
 
 /**
+ * Classify app using AI based on description
+ * Suggests category and tags if not provided by user
+ */
+export async function classifyApp(
+  appName: string,
+  description: string,
+  userTags?: string[]
+): Promise<ClassificationResult> {
+  try {
+    const response = await fetch(CLASSIFY_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        appName,
+        description,
+        userTags: userTags || []
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Classification API error: ${response.status}`);
+    }
+
+    const result = await response.json();
+    
+    return {
+      category: result.category,
+      suggestNewCategory: result.suggestNewCategory || false,
+      newCategoryName: result.newCategoryName,
+      tags: result.tags || [],
+      reasoning: result.reasoning || "AI classification"
+    };
+    
+  } catch (error) {
+    console.error("Classification failed:", error);
+    return {
+      category: "Productivity & Tools", // Default fallback
+      suggestNewCategory: false,
+      tags: userTags || ['app'],
+      reasoning: "Classification failed, using defaults"
+    };
+  }
+}
+
+/**
  * Simplified submission - no image storage needed
  */
 export interface SubmissionData {
@@ -87,6 +143,7 @@ export interface SubmissionData {
   sourceUrl: string;
   language: string;
   verificationResult: VerificationResult;
+  classificationResult?: ClassificationResult;
 }
 
 /**
