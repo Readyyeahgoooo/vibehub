@@ -21,6 +21,8 @@ Your site will be live at: `https://vibehub-[random].vercel.app`
 3. Click **"Save"**
 4. Go to **Deployments** → Click **"..."** → **"Redeploy"**
 
+**That's it!** The code is already configured to use your DeepSeek model (`nex-agi/deepseek-v3.1-nex-n1:free`). Just add the key and it works automatically! 🎉
+
 ### Step 3: Test It!
 
 Visit your site and try:
@@ -37,6 +39,11 @@ Visit your site and try:
 - API key stored in Vercel environment variables
 - **Never exposed to browser**
 - Serverless functions handle all API calls
+
+### AI Models Used (Both FREE!)
+- **Search**: `google/gemini-2.0-flash-exp:free` (backup model)
+- **Verification**: `nex-agi/deepseek-v3.1-nex-n1:free` (your preferred model)
+- Just add your OpenRouter API key - models are already configured!
 
 ### Features That Work Immediately
 - Browse all apps
