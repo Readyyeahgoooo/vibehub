@@ -43,7 +43,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         "X-Title": "Vibe Hub"
       },
       body: JSON.stringify({
-        model: "nex-agi/deepseek-v3.1-nex-n1:free",
+        model: "google/gemini-2.0-flash-exp:free", // FREE vision model
         messages: [
           {
             role: "user",

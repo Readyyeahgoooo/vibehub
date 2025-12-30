@@ -8,10 +8,15 @@
 
 **How it works:**
 1. User uploads a screenshot of their Threads/Twitter post
-2. DeepSeek AI **analyzes the entire image** (not just OCR)
+2. **Google Gemini Flash AI** (with vision) **analyzes the entire image**
 3. AI **extracts the username** from the screenshot
 4. AI **compares** extracted username with claimed username
 5. Returns **verified: true/false** with confidence score
+
+**Model Used:**
+- `google/gemini-2.0-flash-exp:free` - FREE vision model from Google
+- Has multimodal capabilities (can see and understand images)
+- Available through OpenRouter API
 
 **Better than OCR because:**
 - ✅ Understands context (profile pictures, post layout, UI elements)
@@ -171,6 +176,8 @@ Reason: "Could not extract username from screenshot - please upload a clearer im
 
 ### The AI Prompt (in `api/verify.ts`)
 ```typescript
+model: "google/gemini-2.0-flash-exp:free", // FREE vision model
+
 "Analyze this screenshot and extract the username/account name visible in the image.
 Look for profile names, @handles, or account identifiers.
 The user claims their username is: 'Alice'
@@ -267,8 +274,9 @@ if (extractedUrl === providedUrl) {
          │
          ▼
 ┌─────────────────┐
-│ DeepSeek AI     │
-│ Analyzes Image  │
+│ DeepSeek/Gemini │
+│ AI Analyzes     │
+│ Image           │
 │ - Finds username│
 │ - Extracts text │
 │ - Understands UI│

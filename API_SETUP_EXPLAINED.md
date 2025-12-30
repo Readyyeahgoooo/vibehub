@@ -37,19 +37,19 @@ Value: sk-or-v1-xxxxx...
 
 **For Screenshot Verification** (`api/verify.ts`):
 ```typescript
-model: "nex-agi/deepseek-v3.1-nex-n1:free"  // ← Your DeepSeek model
+model: "google/gemini-2.0-flash-exp:free"  // ← FREE vision model
 ```
 
 **For AI Search** (`api/search.ts`):
 ```typescript
-model: "google/gemini-2.0-flash-exp:free"  // ← Backup model
+model: "google/gemini-2.0-flash-exp:free"  // ← FREE text model
 ```
 
-Both are **FREE** models! 🎉
+Both use the same **FREE** Gemini Flash model! 🎉
 
 ### Step 3: It Just Works!
-- User uploads screenshot → Vercel function → DeepSeek analyzes it
-- User searches apps → Vercel function → Gemini finds matches
+- User uploads screenshot → Vercel function → **Gemini Flash (vision) analyzes it**
+- User searches apps → Vercel function → **Gemini Flash finds matches**
 - API key stays hidden server-side ✅
 
 ---
@@ -75,8 +75,7 @@ Your API key is **never sent to the browser**!
 ## 💰 Cost Breakdown
 
 ### OpenRouter API Key
-- **DeepSeek model**: FREE (your verification model)
-- **Gemini model**: FREE (search backup model)
+- **Gemini Flash model**: FREE (vision + text)
 - **Cost**: $0/month
 
 ### Vercel Hosting

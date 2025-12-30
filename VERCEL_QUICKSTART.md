@@ -21,7 +21,7 @@ Your site will be live at: `https://vibehub-[random].vercel.app`
 3. Click **"Save"**
 4. Go to **Deployments** → Click **"..."** → **"Redeploy"**
 
-**That's it!** The code is already configured to use your DeepSeek model (`nex-agi/deepseek-v3.1-nex-n1:free`). Just add the key and it works automatically! 🎉
+**That's it!** The code uses Google Gemini Flash (free vision model) for both search and screenshot verification. Just add the key and it works automatically! 🎉
 
 ### Step 3: Test It!
 
@@ -41,8 +41,8 @@ Visit your site and try:
 - Serverless functions handle all API calls
 
 ### AI Models Used (Both FREE!)
-- **Search**: `google/gemini-2.0-flash-exp:free` (backup model)
-- **Verification**: `nex-agi/deepseek-v3.1-nex-n1:free` (your preferred model)
+- **Search**: `google/gemini-2.0-flash-exp:free` (text analysis)
+- **Verification**: `google/gemini-2.0-flash-exp:free` (vision model for screenshots)
 - Just add your OpenRouter API key - models are already configured!
 
 ### Features That Work Immediately
@@ -62,7 +62,7 @@ Visit your site and try:
 ## 💰 Cost: $0/month
 
 - Vercel Free Tier: 100GB bandwidth
-- Your OpenRouter model: **FREE**
+- Gemini Flash (vision + text): **FREE**
 - Total: **$0** 🎉
 
 ---
