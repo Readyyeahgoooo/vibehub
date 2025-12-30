@@ -1,7 +1,11 @@
 // Client-side verification service
 // Images are sent directly to OpenRouter for verification, no storage needed
 
+// Use proxy if available (hides API key), otherwise direct to OpenRouter
+const USE_PROXY = import.meta.env.VITE_USE_PROXY === 'true';
+const PROXY_URL = import.meta.env.VITE_PROXY_URL || '';
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+const API_ENDPOINT = USE_PROXY ? PROXY_URL : OPENROUTER_API_URL;
 
 export interface VerificationResult {
   verified: boolean;
@@ -48,24 +52,16 @@ export async function verifyScreenshot(
     // Convert image to base64
     const base64Image = await fileToBase64(screenshotFile);
     
-    // Call OpenRouter with vision model
-    const response = await fetch(OPENROUTER_API_URL, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-        "HTTP-Referer": window.location.origin,
-        "X-Title": "Vibe Hub"
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.0-flash-exp:free", // Free vision model
-        messages: [
-          {
-            role: "user",
-            content: [
-              {
-                type: "text",
-                text: `Analyze this screenshot and extract the username/account name visible in the image. 
+    // Prepare request body
+    const requestBody = {
+      model: "nex-agi/deepseek-v3.1-nex-n1:free", // Your preferred model
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: `Analyze this screenshot and extract the username/account name visible in the image. 
 Look for profile names, @handles, or account identifiers.
 The user claims their username is: "${claimedUsername}"
 The source URL is: ${sourceUrl}
@@ -80,19 +76,44 @@ Return ONLY a JSON object with this structure:
 
 Compare the extracted username with the claimed username (case-insensitive, ignore @ prefix).
 Set verified to true only if they match.`
-              },
-              {
-                type: "image_url",
-                image_url: {
-                  url: `data:${screenshotFile.type};base64,${base64Image}`
-                }
+            },
+            {
+              type: "image_url",
+              image_url: {
+                url: `data:${screenshotFile.type};base64,${base64Image}`
               }
-            ]
-          }
-        ],
-        temperature: 0.3,
-        max_tokens: 500
-      })
+            }
+          ]
+        }
+      ],
+      temperature: 0.3,
+      max_tokens: 500
+    };
+
+    // Prepare headers
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+      "HTTP-Referer": window.location.origin,
+      "X-Title": "Vibe Hub"
+    };
+
+    // Add Authorization only if not using proxy
+    if (!USE_PROXY) {
+      if (!apiKey) {
+        return {
+          verified: false,
+          confidence: 0,
+          reason: 'API key not configured'
+        };
+      }
+      headers["Authorization"] = `Bearer ${apiKey}`;
+    }
+    
+    // Call OpenRouter (directly or via proxy)
+    const response = await fetch(API_ENDPOINT, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(requestBody)
     });
 
     if (!response.ok) {
